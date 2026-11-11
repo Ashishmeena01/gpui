@@ -21,6 +21,9 @@ struct Counter {
 
 impl Render for Counter {
     fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
-        div().child(format!("Count: {}", self.count))
+        div()
+            .size(px(1080.0))
+            .bg(rgb(0xf8fafc))
+            .child(format!("Count: {}", self.count))
     }
 }
