@@ -4,9 +4,7 @@ use gpui::*;
 fn main() {
     Application::new().run(|cx: &mut App| {
         let bounds = Bounds::centered(None, size(px(1080.0), px(720.0)), cx);
-        let test = Test {
-            _renders:0
-        };
+    
 
         cx.open_window(
             WindowOptions {
@@ -18,57 +16,45 @@ fn main() {
                         y: px(100.0),
                     }),
                 }),
-                window_bounds: Some(WindowBounds::Windowed(bounds)),
+                window_bounds: Some(WindowBounds::Windowed(bounds)),              
                 ..Default::default()
             },
-            |_, cx| cx.new(|_| Counter { count: 0,renders:0,test }),
+            |_, cx| cx.new(|_| Counter { count: 0,renders:0}),
         )
         .unwrap();
     });
 }
 
 
-trait Html {
-    fn html(&self)->impl IntoElement;
-}
+
+
+#[derive(IntoElement)]
 struct Test{
     _renders:i32
 }
 
-impl Html for Test{
-    fn html(&self) -> impl IntoElement{
-         div()
-            .bg(rgb(0x0))
-            .text_3xl()
-            .size_full()
-            .flex()
-            .text_color(rgb(0xf))
-            .child("This is test screen")
-    }
-}
 
-impl Render for Test{
-    fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
+
+impl RenderOnce for Test{
+   fn render(self, _window: &mut Window, _cx: &mut App) -> impl IntoElement {
        div()
             .bg(rgb(0x0))
             .text_3xl()
             .flex()
             .text_color(rgb(0xf))
             .child("This is test screen")
-    }   
+   } 
 }
 
 struct Counter {
     count: i32,
     renders:i32,
-    test:Test
 }
 
 impl Render for Counter {
     fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         println!("function rendered for {} time",self.renders);
         self.renders += 1;
-        let ht = self.test.html();
 
         div()
             .child(
@@ -161,7 +147,9 @@ impl Render for Counter {
                     ),
             )
             .child(
-                ht
+                Test {
+                    _renders:10
+                }
             )
     
     }
