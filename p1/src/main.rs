@@ -61,7 +61,11 @@ impl Render for Counter {
                     .bg(rgb(0xe2e8f0))
                     .text_color(rgb(0x0f172a))
                     .cursor_pointer()
-                    .child("Reset"),
+                    .child("Reset")
+                    .on_click(cx.listener(|this, _, _, cx| {
+                        this.count = 0;
+                        cx.notify();
+                    })),
             )
     }
 }
