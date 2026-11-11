@@ -53,5 +53,15 @@ impl Render for Counter {
                         cx.notify();
                     })),
             )
+            .child(
+                div()
+                    .id("reset")
+                    .px_4()
+                    .py_2()
+                    .bg(rgb(0xe2e8f0))
+                    .text_color(rgb(0x0f172a))
+                    .cursor_pointer()
+                    .child("Reset"),
+            )
     }
 }
