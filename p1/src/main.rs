@@ -47,7 +47,11 @@ impl Render for Counter {
                     .bg(rgb(0x475569))
                     .text_color(rgb(0xffffff))
                     .cursor_pointer()
-                    .child("Decrement"),
+                    .child("Decrement")
+                    .on_click(cx.listener(|this, _, _, cx| {
+                        this.count -= 1;
+                        cx.notify();
+                    })),
             )
     }
 }
