@@ -11,3 +11,9 @@ From this directory, start the app with:
 ```sh
 cargo run
 ```
+
+## Controls
+
+- **Increment** adds one to the current value.
+- **Decrement** subtracts one; negative values are allowed.
+- **Reset** returns the value to zero.
