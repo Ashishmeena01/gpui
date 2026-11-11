@@ -27,8 +27,19 @@ impl Render for Counter {
             .text_color(rgb(0x0f172a))
             .child(
                 div()
-                    .text_color(rgb(0x0f172a))
+
+                .text_color(rgb(0x0f172a))
                     .child(format!("Count: {}", self.count)),
+            )
+            .child(
+                div()
+                    .id("increment")
+                    .px_4()
+                    .py_2()
+                    .bg(rgb(0x2563eb))
+                    .text_color(rgb(0xffffff))
+                    .cursor_pointer()
+                    .child("Increment"),
             )
     }
 }
