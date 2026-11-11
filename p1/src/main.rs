@@ -2,6 +2,7 @@ use gpui::*;
 
 const WINDOW_WIDTH: f32 = 1080.0;
 const WINDOW_HEIGHT: f32 = 720.0;
+const INITIAL_COUNT: i32 = 0;
 
 fn main() {
     Application::new().run(|cx: &mut App| {
@@ -27,7 +28,9 @@ struct Counter {
 
 impl Counter {
     fn new() -> Self {
-        Self { count: 0 }
+        Self {
+            count: INITIAL_COUNT,
+        }
     }
 }
 
