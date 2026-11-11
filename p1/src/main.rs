@@ -24,7 +24,8 @@ impl Render for Counter {
             .size(px(1080.0))
             .bg(rgb(0xf8fafc))
             .text_color(rgb(0x0f172a))
-            .child(format!("Count: {}", self.count))
+            .child(div().child("Counter"))
+            .child(div().child(format!("Count: {}", self.count)))
             .child(
                 div()
                     .id("increment")
