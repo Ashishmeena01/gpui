@@ -3,7 +3,6 @@ use gpui::*;
 fn main() {
     Application::new().run(|cx: &mut App| {
         let bounds = Bounds::centered(None, size(px(1080.0), px(720.0)), cx);
-
         cx.open_window(
             WindowOptions {
                 window_bounds: Some(WindowBounds::Windowed(bounds)),
@@ -25,11 +24,7 @@ impl Render for Counter {
             .size(px(1080.0))
             .bg(rgb(0xf8fafc))
             .text_color(rgb(0x0f172a))
-            .child(
-                div()
-                .text_color(rgb(0x0f172a))
-                    .child(format!("Count: {}", self.count)),
-            )
+            .child(format!("Count: {}", self.count))
             .child(
                 div()
                     .id("increment")
@@ -43,8 +38,16 @@ impl Render for Counter {
                         this.count += 1;
                         cx.notify();
                     })),
-
-
-                )
+            )
+            .child(
+                div()
+                    .id("decrement")
+                    .px_4()
+                    .py_2()
+                    .bg(rgb(0x475569))
+                    .text_color(rgb(0xffffff))
+                    .cursor_pointer()
+                    .child("Decrement"),
+            )
     }
 }
