@@ -20,14 +20,13 @@ struct Counter {
 }
 
 impl Render for Counter {
-    fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
+    fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         div()
             .size(px(1080.0))
             .bg(rgb(0xf8fafc))
             .text_color(rgb(0x0f172a))
             .child(
                 div()
-
                 .text_color(rgb(0x0f172a))
                     .child(format!("Count: {}", self.count)),
             )
@@ -39,7 +38,13 @@ impl Render for Counter {
                     .bg(rgb(0x2563eb))
                     .text_color(rgb(0xffffff))
                     .cursor_pointer()
-                    .child("Increment"),
-            )
+                    .child("Increment")
+                    .on_click(cx.listener(|this, _, _, cx| {
+                        this.count += 1;
+                        cx.notify();
+                    })),
+
+
+                )
     }
 }
