@@ -1,8 +1,15 @@
 use gpui::*;
 
+const WINDOW_WIDTH: f32 = 1080.0;
+const WINDOW_HEIGHT: f32 = 720.0;
+
 fn main() {
     Application::new().run(|cx: &mut App| {
-        let bounds = Bounds::centered(None, size(px(1080.0), px(720.0)), cx);
+        let bounds = Bounds::centered(
+            None,
+            size(px(WINDOW_WIDTH), px(WINDOW_HEIGHT)),
+            cx,
+        );
         cx.open_window(
             WindowOptions {
                 window_bounds: Some(WindowBounds::Windowed(bounds)),
@@ -21,7 +28,7 @@ struct Counter {
 impl Render for Counter {
     fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         div()
-            .size(px(1080.0))
+            .size(px(WINDOW_WIDTH))
             .bg(rgb(0xf8fafc))
             .text_color(rgb(0x0f172a))
             .child(div().child("Counter"))
