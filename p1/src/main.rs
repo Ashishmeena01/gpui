@@ -3,154 +3,152 @@ use gpui::*;
 
 fn main() {
     Application::new().run(|cx: &mut App| {
-        let bounds = Bounds::centered(None, size(px(1080.0), px(720.0)), cx);
-    
+        let bounds =
+            Bounds::centered(None, size(px(1080.0), px(720.0)), cx);
 
         cx.open_window(
             WindowOptions {
                 titlebar: Some(TitlebarOptions {
-                    title: Some(SharedString::new("test-screen")),
+                    title: Some("test-screen".into()),
                     appears_transparent: true,
                     traffic_light_position: Some(Point {
                         x: px(1000.0),
                         y: px(100.0),
                     }),
                 }),
-                window_bounds: Some(WindowBounds::Windowed(bounds)),              
+                window_bounds: Some(WindowBounds::Windowed(bounds)),
                 ..Default::default()
             },
-            |_, cx| cx.new(|_| Counter { count: 0,renders:0}),
+            |_, cx| {
+                cx.new(|_| Counter {
+                    count: 0,
+                    renders: 0,
+                })
+            },
         )
         .unwrap();
     });
 }
 
-
-
-
-#[derive(IntoElement)]
-struct Test{
-    _renders:i32
-}
-
-
-
-impl RenderOnce for Test{
-   fn render(self, _window: &mut Window, _cx: &mut App) -> impl IntoElement {
-       div()
-            .bg(rgb(0x0))
-            .text_3xl()
-            .flex()
-            .text_color(rgb(0xf))
-            .child("This is test screen")
-   } 
-}
-
+// Stateful component
 struct Counter {
     count: i32,
-    renders:i32,
+    renders: i32,
 }
 
 impl Render for Counter {
-    fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
-        println!("function rendered for {} time",self.renders);
+    fn render(
+        &mut self,
+        _window: &mut Window,
+        cx: &mut Context<Self>,
+    ) -> impl IntoElement {
+
         self.renders += 1;
 
+        println!("Counter rendered {} times", self.renders);
+
         div()
+            .flex()
+            .flex_col()
+            .gap_4()
+            .p_4()
+            .bg(rgb(0xf8fafc))
+            .text_color(rgb(0x0f172a))
+
+            // Header
             .child(
                 div()
                     .flex()
-                    .bg(rgb(0xf8fafc))
-                    .h(px(50.0))
-                    .w(px(1080.0))
-                    .text_color(rgb(0x0f172a))
+                    .justify_between()
+                    .child("My Counter")
                     .child(
                         div()
                             .id("hide")
-                            .h_full()
-                            .w_1_2()
-                            .px_4()
-                            .py_2()
-                            .bg(rgb(0x2563eb))
-                            .text_color(rgb(0x000000))
                             .cursor_pointer()
-                            .child("hide")
-                            .on_click(cx.listener(|_this, _, _, cx| {
-                                cx.open_url("https://ashishmeena.vercel.app");
-                                cx.notify();
-                            })),
+                            .child("Open website")
+                            .on_click(cx.listener(|_, _, _, cx| {
+                                cx.open_url(
+                                    "https://ashishmeena.vercel.app"
+                                );
+                            }))
                     )
-                    .child(
-                        div()
-                            .id("x")
-                            .px_4()
-                            .h_full()
-                            .w_1_2()
-                            .py_2()
-                            .bg(rgb(0x2563eb))
-                            .text_color(rgb(0xffffff))
-                            .cursor_pointer()
-                            .child("x")
-                            .on_click(cx.listener(|this, _, _, cx| {
-                                this.count += 1;
-                                cx.quit();
-                            })),
-                    ),
             )
+
+            // Counter value
             .child(
                 div()
-                    .size(px(1080.0))
-                    .bg(rgb(0xf8fafc))
-                    .text_color(rgb(0x0f172a))
+                    .text_3xl()
                     .child(format!("Count: {}", self.count))
-                    .child(
-                        div()
-                            .id("increment")
-                            .px_4()
-                            .py_2()
-                            .bg(rgb(0x2563eb))
-                            .text_color(rgb(0xffffff))
-                            .cursor_pointer()
-                            .child("Increment")
-                            .on_click(cx.listener(|this, _, _, cx| {
-                                this.count += 1;
-                                cx.notify();
-                            })),
-                    )
-                    .child(
-                        div()
-                            .id("decrement")
-                            .px_4()
-                            .py_2()
-                            .bg(rgb(0x475569))
-                            .text_color(rgb(0xffffff))
-                            .cursor_pointer()
-                            .child("Decrement")
-                            .on_click(cx.listener(|this, _, _, cx| {
-                                this.count -= 1;
-                                cx.notify();
-                            })),
-                    )
-                    .child(
-                        div()
-                            .id("reset")
-                            .px_4()
-                            .py_2()
-                            .bg(rgb(0x475569))
-                            .text_color(rgb(0xffffff))
-                            .cursor_pointer()
-                            .child("reset")
-                            .on_click(cx.listener(|this, _, _, cx| {
-                                this.count = 0;
-                                cx.notify();
-                            })),
-                    ),
             )
+
+            // Increment
             .child(
-                Test {
-                    _renders:10
-                }
+                div()
+                    .id("increment")
+                    .cursor_pointer()
+                    .bg(rgb(0x2563eb))
+                    .text_color(rgb(0xffffff))
+                    .p_2()
+                    .child("Increment")
+                    .on_click(cx.listener(|this, _, _, cx| {
+                        this.count += 1;
+                        cx.notify();
+                    }))
             )
-    
+
+            // Decrement
+            .child(
+                div()
+                    .id("decrement")
+                    .cursor_pointer()
+                    .bg(rgb(0x475569))
+                    .text_color(rgb(0xffffff))
+                    .p_2()
+                    .child("Decrement")
+                    .on_click(cx.listener(|this, _, _, cx| {
+                        this.count -= 1;
+                        cx.notify();
+                    }))
+            )
+
+            // Reset
+            .child(
+                div()
+                    .id("reset")
+                    .cursor_pointer()
+                    .bg(rgb(0x475569))
+                    .text_color(rgb(0xffffff))
+                    .p_2()
+                    .child("Reset")
+                    .on_click(cx.listener(|this, _, _, cx| {
+                        this.count = 0;
+                        cx.notify();
+                    }))
+            )
+
+            // Custom child component
+            .child(Test {
+                _renders: 10,
+            })
+    }
+}
+
+// Stateless child component
+#[derive(IntoElement)]
+struct Test {
+    _renders: i32,
+}
+
+impl RenderOnce for Test {
+    fn render(
+        self,
+        _window: &mut Window,
+        _cx: &mut App,
+    ) -> impl IntoElement {
+        div()
+            .bg(rgb(0x000000))
+            .text_3xl()
+            .text_color(rgb(0xffffff))
+            .child("This is test screen")
     }
 }
