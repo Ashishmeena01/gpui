@@ -15,7 +15,7 @@ fn main() {
                 window_bounds: Some(WindowBounds::Windowed(bounds)),
                 ..Default::default()
             },
-            |_, cx| cx.new(|_| Counter { count: 0 }),
+            |_, cx| cx.new(|_| Counter::new()),
         )
         .unwrap();
     });
@@ -23,6 +23,12 @@ fn main() {
 
 struct Counter {
     count: i32,
+}
+
+impl Counter {
+    fn new() -> Self {
+        Self { count: 0 }
+    }
 }
 
 impl Render for Counter {
