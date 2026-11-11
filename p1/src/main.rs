@@ -1,15 +1,12 @@
 
-use std::task::Context;
-
 use gpui::*;
 
 fn main() {
     Application::new().run(|cx: &mut App| {
         let bounds = Bounds::centered(None, size(px(1080.0), px(720.0)), cx);
-        let test = Test{
-            renders:0
+        let test = Test {
+            _renders:0
         };
-
 
         cx.open_window(
             WindowOptions {
@@ -24,38 +21,55 @@ fn main() {
                 window_bounds: Some(WindowBounds::Windowed(bounds)),
                 ..Default::default()
             },
-            |window, cx| cx.new(|_| {
-                div
-            }),
+            |_, cx| cx.new(|_| Counter { count: 0,renders:0,test }),
         )
         .unwrap();
     });
 }
 
-struct Test {
-    renders: i32,
+
+trait Html {
+    fn html(&self)->impl IntoElement;
+}
+struct Test{
+    _renders:i32
 }
 
-impl Render for Test {
-    fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
-        div()
+impl Html for Test{
+    fn html(&self) -> impl IntoElement{
+         div()
             .bg(rgb(0x0))
             .text_3xl()
+            .size_full()
             .flex()
             .text_color(rgb(0xf))
             .child("This is test screen")
     }
 }
 
+impl Render for Test{
+    fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
+       div()
+            .bg(rgb(0x0))
+            .text_3xl()
+            .flex()
+            .text_color(rgb(0xf))
+            .child("This is test screen")
+    }   
+}
+
 struct Counter {
     count: i32,
-    renders: i32,
+    renders:i32,
+    test:Test
 }
 
 impl Render for Counter {
     fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
-        println!("function rendered for {} time", self.renders);
+        println!("function rendered for {} time",self.renders);
         self.renders += 1;
+        let ht = self.test.html();
+
         div()
             .child(
                 div()
@@ -146,5 +160,9 @@ impl Render for Counter {
                             })),
                     ),
             )
+            .child(
+                ht
+            )
+    
     }
 }
