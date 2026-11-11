@@ -38,6 +38,7 @@ impl Render for Counter {
             .bg(rgb(0xf8fafc))
             .text_color(rgb(0x0f172a))
             .child(div().child("Counter"))
+            .child(div().child("Current value"))
             .child(div().child(format!("Count: {}", self.count)))
             .child(
                 div()
